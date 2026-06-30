@@ -1,20 +1,13 @@
-import React, { useState, useRef } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
+import React, { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { PhotoProvider, PhotoView } from 'react-photo-view'
 import 'react-photo-view/dist/react-photo-view.css'
 import { ZoomIn } from 'lucide-react'
 import { galleryImages } from '../../data/gallery'
 
-const categories = ['All', ...Array.from(new Set(galleryImages.map(g => g.category)))]
-
 export default function Gallery() {
-  const [activeCategory, setActiveCategory] = useState('All')
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
-
-  const filtered = activeCategory === 'All'
-    ? galleryImages
-    : galleryImages.filter(g => g.category === activeCategory)
 
   return (
     <section id="gallery" className="section-padding gallery-section" aria-label="Project Gallery">
@@ -31,102 +24,51 @@ export default function Gallery() {
           <p className="section-subtitle" style={{ margin: '0 auto 36px' }}>
             Browse completed projects from across Karnataka — compound walls, slabs, columns, labour rooms and more.
           </p>
-
-          {/* Category Filter */}
-          <div className="gallery-filters" role="tablist" aria-label="Gallery filter">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                className={`gallery-filter-btn ${activeCategory === cat ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat)}
-                role="tab"
-                aria-selected={activeCategory === cat}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
         </motion.div>
 
         <PhotoProvider
           speed={() => 300}
           easing={type => type === 2 ? 'cubic-bezier(0.36, 0, 0.66, -0.56)' : 'cubic-bezier(0.34, 1.56, 0.64, 1)'}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory}
-              className="gallery-masonry"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {filtered.map((img, i) => (
-                <motion.div
-                  key={img.id}
-                  className="gallery-item"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: i * 0.06 }}
-                >
-                  <PhotoView src={img.src}>
-                    <div className="gallery-thumb-wrap" role="button" tabIndex={0} aria-label={`View ${img.alt}`}>
-                      <img
-                        src={img.thumb}
-                        alt={img.alt}
-                        className="gallery-thumb"
-                        loading="lazy"
-                      />
-                      <div className="gallery-overlay">
-                        <div className="gallery-zoom-icon">
-                          <ZoomIn size={22} color="white" />
-                        </div>
-                        <div className="gallery-item-label">{img.alt}</div>
+          <div className="gallery-grid">
+            {galleryImages.map((img, i) => (
+              <motion.div
+                key={img.id}
+                className="gallery-item"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: i * 0.06 }}
+              >
+                <PhotoView src={img.src}>
+                  <div className="gallery-thumb-wrap" role="button" tabIndex={0} aria-label="View image">
+                    <img
+                      src={img.thumb}
+                      alt=""
+                      className="gallery-thumb"
+                      loading="lazy"
+                    />
+                    <div className="gallery-overlay">
+                      <div className="gallery-zoom-icon">
+                        <ZoomIn size={22} color="white" />
                       </div>
-                      <div className="gallery-category-tag">{img.category}</div>
                     </div>
-                  </PhotoView>
-                </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+                  </div>
+                </PhotoView>
+              </motion.div>
+            ))}
+          </div>
         </PhotoProvider>
       </div>
 
       <style>{`
         .gallery-section { background: var(--color-white); }
-        .gallery-filters {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          justify-content: center;
-        }
-        .gallery-filter-btn {
-          padding: 8px 20px;
-          border-radius: 50px;
-          font-size: 0.8125rem;
-          font-weight: 600;
-          background: var(--color-light-gray);
-          color: var(--color-dark-text);
-          border: 1.5px solid transparent;
-          transition: all 0.25s ease;
-        }
-        .gallery-filter-btn:hover,
-        .gallery-filter-btn.active {
-          background: var(--color-primary);
-          color: var(--color-white);
-          border-color: var(--color-primary);
-        }
-        .gallery-filter-btn.active {
-          box-shadow: 0 4px 16px rgba(13,27,42,0.25);
-        }
-        .gallery-masonry {
-          columns: 3;
-          column-gap: 16px;
+        .gallery-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
         }
         .gallery-item {
-          break-inside: avoid;
-          margin-bottom: 16px;
+          width: 100%;
         }
         .gallery-thumb-wrap {
           position: relative;
@@ -134,10 +76,12 @@ export default function Gallery() {
           overflow: hidden;
           cursor: pointer;
           display: block;
+          aspect-ratio: 4 / 3;
         }
         .gallery-thumb {
           width: 100%;
-          height: auto;
+          height: 100%;
+          object-fit: cover;
           display: block;
           border-radius: 16px;
           transition: transform 0.4s ease;
@@ -146,9 +90,8 @@ export default function Gallery() {
         .gallery-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to top, rgba(13,27,42,0.7) 0%, rgba(13,27,42,0.1) 60%, transparent 100%);
+          background: rgba(13,27,42,0.35);
           display: flex;
-          flex-direction: column;
           align-items: center;
           justify-content: center;
           opacity: 0;
@@ -167,34 +110,11 @@ export default function Gallery() {
           transition: transform 0.2s;
         }
         .gallery-thumb-wrap:hover .gallery-zoom-icon { transform: scale(1.1); }
-        .gallery-item-label {
-          position: absolute;
-          bottom: 14px;
-          left: 14px;
-          right: 14px;
-          font-size: 0.8rem;
-          font-weight: 600;
-          color: rgba(255,255,255,0.9);
-          text-align: left;
-        }
-        .gallery-category-tag {
-          position: absolute;
-          top: 12px;
-          left: 12px;
-          background: rgba(244,163,0,0.9);
-          color: var(--color-primary);
-          font-size: 0.7rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          padding: 4px 10px;
-          border-radius: 50px;
-        }
         @media (max-width: 1024px) {
-          .gallery-masonry { columns: 2; }
+          .gallery-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 580px) {
-          .gallery-masonry { columns: 1; }
+          .gallery-grid { grid-template-columns: 1fr; }
         }
       `}</style>
     </section>

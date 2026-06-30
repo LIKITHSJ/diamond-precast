@@ -17,15 +17,11 @@ const productLinks = [
   'Ready Made Compound Wall',
   'M25 Grade Slab',
   'M30 Grade Column',
-  'Labour Room',
-  'Material Storage Room',
 ]
 
 const socialLinks = [
-  { icon: Facebook, href: 'https://facebook.com/', label: 'Facebook' },
-  { icon: Instagram, href: 'https://instagram.com/', label: 'Instagram' },
-  { icon: Youtube, href: 'https://youtube.com/', label: 'YouTube' },
-  { icon: Twitter, href: 'https://twitter.com/', label: 'Twitter' },
+  
+  { icon: Instagram, href: 'https://www.instagram.com/diamond_precast_/', label: 'Instagram' },
 ]
 
 export default function Footer() {
@@ -107,9 +103,9 @@ export default function Footer() {
                   <MessageCircle size={14} color="var(--color-accent)" />
                   <span>WhatsApp Us</span>
                 </a>
-                <a href="mailto:info@diamondprecast.com" className="footer-contact-row" aria-label="Email us">
+                <a href="mailto:diamondprecast96@gmail.com" className="footer-contact-row" aria-label="Email us">
                   <Mail size={14} color="var(--color-accent)" />
-                  <span>info@diamondprecast.com</span>
+                  <span>diamondprecast96@gmail.com</span>
                 </a>
                 <div className="footer-contact-row">
                   <MapPin size={14} color="var(--color-accent)" style={{ flexShrink: 0 }} />

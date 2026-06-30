@@ -1,31 +1,19 @@
-import React, { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { Phone, MessageCircle, Mail, MapPin, Clock, ArrowRight } from 'lucide-react'
+import React, { useRef, useState, useEffect } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { Phone, MessageCircle, Mail, MapPin, Clock, ArrowRight, ChevronDown } from 'lucide-react'
 
-const contactInfo = [
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '+91 88848 42088',
-    sub: 'Mon–Sat, 8am–7pm',
-    href: 'tel:+918884842088',
-    action: 'Call Now',
-  },
-  {
-    icon: MessageCircle,
-    label: 'WhatsApp',
-    value: '+91 88848 42088',
-    sub: 'Quick response guaranteed',
-    href: 'https://wa.me/918884842088?text=Hi%20Diamond%20Precast%2C%20I%20need%20a%20quote%20for%20precast%20services.',
-    action: 'Chat Now',
-  },
+const contacts = [
+  { name: 'Rangaswamy GB', number: '918884842088' },
+  { name: 'Dinesh', number: '918884842388' },
+]
+
+const otherInfo = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'info@diamondprecast.com',
+    value: 'diamondprecast96@gmail.com',
     sub: 'We reply within 24 hours',
-    href: 'mailto:info@diamondprecast.com',
-    action: 'Send Email',
+    href: 'mailto:diamondprecast96@gmail.com',
   },
   {
     icon: MapPin,
@@ -33,7 +21,6 @@ const contactInfo = [
     value: 'Thimmasandra, Tarahunase, Chikkajala Hobli, Bengaluru North – 562157, Karnataka',
     sub: 'Factory & Office',
     href: 'https://maps.google.com/?q=Diamond+Precast+Bengaluru',
-    action: 'Get Directions',
   },
 ]
 
@@ -43,9 +30,109 @@ const hours = [
   { day: 'Sunday', time: 'By Appointment' },
 ]
 
+function ContactDropdownCard({ icon: Icon, label, sub, type }) {
+  const ref = useRef(null)
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button
+        className="contact-card"
+        onClick={() => setOpen(prev => !prev)}
+        style={{ width: '100%', cursor: 'pointer', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.05)', textAlign: 'left' }}
+        aria-expanded={open}
+      >
+        <div className="contact-card-icon">
+          <Icon size={22} />
+        </div>
+        <div className="contact-card-body">
+          <div className="contact-card-label">{label}</div>
+          <div className="contact-card-value">Rangaswamy GB &amp; Dinesh</div>
+          <div className="contact-card-sub">{sub}</div>
+        </div>
+        <div className="contact-card-arrow">
+          <ChevronDown size={16} style={{ transition: 'transform 0.25s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+        </div>
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: 'absolute',
+              top: 'calc(100% + 8px)',
+              left: 0,
+              right: 0,
+              background: '#0D1F5C',
+              border: '1px solid rgba(232,119,34,0.35)',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
+              zIndex: 100,
+            }}
+          >
+            {contacts.map((contact, i) => (
+              <a
+                key={`${type}-${contact.number}`}
+                href={type === 'call' ? `tel:+${contact.number}` : `https://wa.me/${contact.number}?text=Hi%20Diamond%20Precast%2C%20I%20need%20a%20quote%20for%20precast%20services.`}
+                target={type === 'whatsapp' ? '_blank' : undefined}
+                rel={type === 'whatsapp' ? 'noopener noreferrer' : undefined}
+                onClick={() => setOpen(false)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '13px 18px',
+                  color: '#FFF',
+                  textDecoration: 'none',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
+                  borderBottom: i < contacts.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = type === 'call' ? 'rgba(232,119,34,0.2)' : 'rgba(37,211,102,0.2)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <Icon size={14} style={{ color: type === 'call' ? '#E87722' : '#25D366' }} />
+                {contact.name}
+              </a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 export default function Contact() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  const ctaCallRef = useRef(null)
+  const ctaWaRef = useRef(null)
+  const [ctaCallOpen, setCtaCallOpen] = useState(false)
+  const [ctaWaOpen, setCtaWaOpen] = useState(false)
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ctaCallRef.current && !ctaCallRef.current.contains(e.target)) setCtaCallOpen(false)
+      if (ctaWaRef.current && !ctaWaRef.current.contains(e.target)) setCtaWaOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
   return (
     <section id="contact" className="section-padding contact-section" aria-label="Contact Diamond Precast">
@@ -67,7 +154,6 @@ export default function Contact() {
         </motion.div>
 
         <div className="contact-grid">
-          {/* Contact Info */}
           <motion.div
             className="contact-info-col"
             initial={{ opacity: 0, x: -40 }}
@@ -75,7 +161,10 @@ export default function Contact() {
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             <div className="contact-cards">
-              {contactInfo.map((info, i) => {
+              <ContactDropdownCard icon={Phone} label="Phone" sub="Mon–Sat, 8am–7pm" type="call" />
+              <ContactDropdownCard icon={MessageCircle} label="WhatsApp" sub="Quick response guaranteed" type="whatsapp" />
+
+              {otherInfo.map((info) => {
                 const Icon = info.icon
                 return (
                   <a key={info.label} href={info.href} target={info.href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="contact-card" aria-label={`${info.label}: ${info.value}`}>
@@ -95,7 +184,6 @@ export default function Contact() {
               })}
             </div>
 
-            {/* Business Hours */}
             <div className="hours-box">
               <div className="hours-header">
                 <Clock size={18} color="var(--color-accent)" />
@@ -110,7 +198,6 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Map */}
           <motion.div
             className="contact-map-col"
             initial={{ opacity: 0, x: 40 }}
@@ -118,7 +205,6 @@ export default function Contact() {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <div className="map-wrap">
-              {/* Google Maps embed placeholder — replace src with real embed URL */}
               <iframe
                 title="Diamond Precast Location Map"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3884.946512251636!2d77.5859042!3d13.1657725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1f00743f6629%3A0x879dd96c59063389!2sDiamond%20precast%20compound%20wall!5e0!3m2!1sen!2sin!4v1782464079138!5m2!1sen!2sin"
@@ -134,34 +220,139 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* CTA Box */}
             <div className="cta-box">
               <h3 className="cta-title">Ready to start your project?</h3>
               <p className="cta-sub">Call or WhatsApp us right now for a same-day response and free site visit quote.</p>
               <div className="cta-buttons">
-                <a href="tel:+918884842088" className="btn-primary" aria-label="Call Diamond Precast">
-                  <Phone size={16} /> Call Now
-                </a>
-                
-                  <a href="https://wa.me/918884842088?text=Hi%20Diamond%20Precast%2C%20I%20want%20a%20free%20quote%20for%20my%20project."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '14px 28px',
-                    background: '#25D366',
-                    color: '#fff',
-                    fontWeight: 700,
-                    fontSize: '0.9375rem',
-                    borderRadius: '50px',
-                    transition: 'all 0.3s ease',
-                  }}
-                  aria-label="WhatsApp Diamond Precast"
-                >
-                  <MessageCircle size={16} /> WhatsApp
-                </a>
+                {/* Call dropdown */}
+                <div ref={ctaCallRef} style={{ position: 'relative' }}>
+                  <button
+                    className="btn-primary"
+                    onClick={() => { setCtaCallOpen(p => !p); setCtaWaOpen(false) }}
+                    style={{ cursor: 'pointer', border: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <Phone size={16} /> Call Now
+                    <ChevronDown size={14} style={{ transition: 'transform 0.25s', transform: ctaCallOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                  </button>
+                  <AnimatePresence>
+                    {ctaCallOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                          position: 'absolute',
+                          top: 'calc(100% + 10px)',
+                          left: 0,
+                          background: '#0D1F5C',
+                          border: '1px solid rgba(232,119,34,0.35)',
+                          borderRadius: '12px',
+                          overflow: 'hidden',
+                          boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
+                          minWidth: '200px',
+                          zIndex: 100,
+                        }}
+                      >
+                        {contacts.map((contact, i) => (
+                          <a
+                            key={`ctacall-${contact.number}`}
+                            href={`tel:+${contact.number}`}
+                            onClick={() => setCtaCallOpen(false)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                              padding: '13px 18px',
+                              color: '#FFF',
+                              textDecoration: 'none',
+                              fontWeight: 600,
+                              fontSize: '0.875rem',
+                              borderBottom: i < contacts.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(232,119,34,0.2)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          >
+                            <Phone size={14} style={{ color: '#E87722' }} />
+                            {contact.name}
+                          </a>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* WhatsApp dropdown */}
+                <div ref={ctaWaRef} style={{ position: 'relative' }}>
+                  <button
+                    onClick={() => { setCtaWaOpen(p => !p); setCtaCallOpen(false) }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '14px 28px',
+                      background: '#25D366',
+                      color: '#fff',
+                      fontWeight: 700,
+                      fontSize: '0.9375rem',
+                      borderRadius: '50px',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                    aria-label="WhatsApp Diamond Precast"
+                  >
+                    <MessageCircle size={16} /> WhatsApp
+                    <ChevronDown size={14} style={{ transition: 'transform 0.25s', transform: ctaWaOpen ? 'rotate(180deg)' : 'rotate(0deg)' }} />
+                  </button>
+                  <AnimatePresence>
+                    {ctaWaOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.2 }}
+                        style={{
+                          position: 'absolute',
+                          top: 'calc(100% + 10px)',
+                          left: 0,
+                          background: '#0D1F5C',
+                          border: '1px solid rgba(232,119,34,0.35)',
+                          borderRadius: '12px',
+                          overflow: 'hidden',
+                          boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
+                          minWidth: '200px',
+                          zIndex: 100,
+                        }}
+                      >
+                        {contacts.map((contact, i) => (
+                          <a
+                            key={`ctawa-${contact.number}`}
+                            href={`https://wa.me/${contact.number}?text=Hi%20Diamond%20Precast%2C%20I%20want%20a%20free%20quote%20for%20my%20project.`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setCtaWaOpen(false)}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                              padding: '13px 18px',
+                              color: '#FFF',
+                              textDecoration: 'none',
+                              fontWeight: 600,
+                              fontSize: '0.875rem',
+                              borderBottom: i < contacts.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(37,211,102,0.2)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                          >
+                            <MessageCircle size={14} style={{ color: '#25D366' }} />
+                            {contact.name}
+                          </a>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -250,7 +441,6 @@ export default function Contact() {
         }
         .contact-card:hover .contact-card-arrow {
           color: var(--color-accent);
-          transform: translateX(4px);
         }
         .hours-box {
           background: rgba(255,255,255,0.04);

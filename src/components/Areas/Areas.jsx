@@ -1,11 +1,27 @@
-import React, { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { MapPin } from 'lucide-react'
+import React, { useRef, useState, useEffect } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { MapPin, Phone, ChevronDown } from 'lucide-react'
 import { areas } from '../../data/areas'
+
+const contacts = [
+  { name: 'Rangaswamy GB', number: '918884842088' },
+  { name: 'Dinesh', number: '918884842388' },
+]
 
 export default function Areas() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  const callRef = useRef(null)
+  const [callOpen, setCallOpen] = useState(false)
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (callRef.current && !callRef.current.contains(e.target)) setCallOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
 
   return (
     <section id="areas" className="section-padding areas-section" aria-label="Areas We Serve">
@@ -55,10 +71,74 @@ export default function Areas() {
           transition={{ duration: 0.6, delay: 0.6 }}
         >
           <p>Don't see your area? We may still be able to serve you.</p>
-          <a href="tel:+918884842088" className="btn-primary">
-            <MapPin size={16} />
-            Check Availability
-          </a>
+
+          <div ref={callRef} style={{ position: 'relative' }}>
+            <button
+              className="btn-primary"
+              onClick={() => setCallOpen(prev => !prev)}
+              style={{ cursor: 'pointer', border: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+              aria-expanded={callOpen}
+            >
+              <MapPin size={16} />
+              Check Availability
+              <ChevronDown
+                size={14}
+                style={{
+                  transition: 'transform 0.25s',
+                  transform: callOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                }}
+              />
+            </button>
+
+            <AnimatePresence>
+              {callOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.2 }}
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 10px)',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#0D1F5C',
+                    border: '1px solid rgba(232,119,34,0.35)',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
+                    minWidth: '200px',
+                    zIndex: 100,
+                  }}
+                >
+                  {contacts.map((contact, i) => (
+                    <a
+                      key={`areas-call-${contact.number}`}
+                      href={`tel:+${contact.number}`}
+                      onClick={() => setCallOpen(false)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        padding: '13px 18px',
+                        color: '#FFF',
+                        textDecoration: 'none',
+                        fontWeight: 600,
+                        fontSize: '0.875rem',
+                        borderBottom: i < contacts.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                        transition: 'background 0.15s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(232,119,34,0.2)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <Phone size={14} style={{ color: '#E87722' }} />
+                      {contact.name}
+                    </a>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
       </div>
 

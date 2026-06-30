@@ -1,11 +1,28 @@
-import React, { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { CheckCircle, ArrowRight } from 'lucide-react'
+import React, { useRef, useState, useEffect } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { CheckCircle, ArrowRight, Phone, ChevronDown } from 'lucide-react'
 import { products } from '../../data/products'
+
+const contacts = [
+  { name: 'Rangaswamy GB', number: '918884842088' },
+  { name: 'Dinesh', number: '918884842388' },
+]
 
 function ProductCard({ product, index }) {
   const ref = useRef(null)
+  const dropdownRef = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
+  const [callDropdownOpen, setCallDropdownOpen] = useState(false)
+
+  useEffect(() => {
+    const clickHandler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setCallDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', clickHandler)
+    return () => document.removeEventListener('mousedown', clickHandler)
+  }, [])
 
   return (
     <motion.article
@@ -16,16 +33,6 @@ function ProductCard({ product, index }) {
       transition={{ duration: 0.6, delay: index * 0.12 }}
       aria-label={product.title}
     >
-      <div className="product-image-wrap">
-        <img
-          src={product.image}
-          alt={product.title}
-          className="product-img"
-          loading="lazy"
-        />
-        <div className="product-badge">{product.badge}</div>
-        <div className="product-img-overlay" />
-      </div>
       <div className="product-body">
         <div className="product-specs-tag">{product.specs}</div>
         <h3 className="product-title">{product.title}</h3>
@@ -41,13 +48,107 @@ function ProductCard({ product, index }) {
             ))}
           </ul>
         </div>
-        
-          <a href="tel:+919876543210"
-          className="product-cta"
-          aria-label={`Enquire about ${product.title}`}
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderTop: '1px solid #f0f0f0',
+            paddingTop: '12px',
+            marginTop: 'auto',
+            position: 'relative',
+          }}
         >
-          Enquire Now <ArrowRight size={16} />
-        </a>
+          <a
+            href={`https://wa.me/918884842088?text=Hi%20Diamond%20Precast%2C%20I%20want%20to%20enquire%20about%20your%20${encodeURIComponent(product.title)}.`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="product-cta"
+            style={{ borderTop: 'none', padding: '0' }}
+            aria-label={`Enquire about ${product.title}`}
+          >
+            Enquire Now <ArrowRight size={16} />
+          </a>
+
+          <div ref={dropdownRef} style={{ position: 'relative' }}>
+            <button
+              onClick={() => setCallDropdownOpen(prev => !prev)}
+              style={{
+                background: 'var(--color-accent, #E87722)',
+                color: 'var(--color-primary, #0D1F5C)',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '8px 14px',
+                fontWeight: '700',
+                fontSize: '0.8rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: '0 2px 6px rgba(232,119,34,0.2)',
+              }}
+            >
+              <Phone size={13} />
+              Call Now
+              <ChevronDown
+                size={12}
+                style={{
+                  transition: 'transform 0.2s',
+                  transform: callDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                }}
+              />
+            </button>
+
+            <AnimatePresence>
+              {callDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 4 }}
+                  transition={{ duration: 0.15 }}
+                  style={{
+                    position: 'absolute',
+                    bottom: 'calc(100% + 8px)',
+                    right: 0,
+                    background: '#0D1F5C',
+                    border: '1px solid rgba(232,119,34,0.3)',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                    minWidth: '170px',
+                    zIndex: 50,
+                  }}
+                >
+                  {contacts.map((contact, i) => (
+                    <a
+                      key={`prod-call-${contact.number}`}
+                      href={`tel:+${contact.number}`}
+                      onClick={() => setCallDropdownOpen(false)}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        padding: '10px 14px',
+                        color: '#FFF',
+                        textDecoration: 'none',
+                        fontWeight: 600,
+                        fontSize: '0.8rem',
+                        borderBottom: i < contacts.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+                        transition: 'background 0.15s',
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(232,119,34,0.2)')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <Phone size={12} style={{ color: '#E87722' }} />
+                      {contact.name}
+                    </a>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </motion.article>
   )
@@ -116,36 +217,6 @@ export default function Products() {
           transform: translateY(-6px);
           box-shadow: var(--shadow-xl);
         }
-        .product-image-wrap {
-          position: relative;
-          height: 220px;
-          overflow: hidden;
-        }
-        .product-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-        .product-card:hover .product-img { transform: scale(1.05); }
-        .product-img-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(13,27,42,0.4) 0%, transparent 60%);
-        }
-        .product-badge {
-          position: absolute;
-          top: 14px;
-          right: 14px;
-          background: var(--color-accent);
-          color: var(--color-primary);
-          font-size: 0.7rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          padding: 5px 12px;
-          border-radius: 50px;
-        }
         .product-body {
           padding: 28px;
           flex: 1;
@@ -207,7 +278,6 @@ export default function Products() {
           font-weight: 700;
           color: var(--color-primary);
           padding: 12px 0;
-          border-top: 1px solid #f0f0f0;
           transition: color 0.2s, gap 0.2s;
         }
         .product-cta:hover { color: var(--color-accent); gap: 12px; }

@@ -38,13 +38,13 @@ export default function WhyChooseUs() {
             </p>
             {/* REPLACE IMAGE: Site/team showcase photo for why-choose-us section */}
             <div className="why-image-wrap">
-              <img
-                src="https://picsum.photos/seed/whychoosedp/600/400"
-                alt="Diamond Precast quality construction work"
-                className="why-img"
-                loading="lazy"
-              />
-            </div>
+  <img
+    src="/images/visitingcard.jpeg"
+    alt="Diamond Precast quality construction work"
+    className="why-img"
+    loading="lazy"
+  />
+</div>
           </motion.div>
 
           {/* Right: reason cards */}
@@ -97,9 +97,19 @@ export default function WhyChooseUs() {
         }
         .why-content { position: sticky; top: 100px; }
         .why-image-wrap {
-          border-radius: 20px;
-          overflow: hidden;
-          box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+  background: #0a1730;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.why-img {
+  width: 100%;
+  height: 240px;
+  object-fit: contain;
+}
         }
         .why-img {
           width: 100%;

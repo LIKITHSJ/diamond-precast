@@ -45,7 +45,7 @@ export default function About() {
             <div className="about-image-wrap">
               {/* REPLACE IMAGE: Company team / factory / site overview photo */}
               <img
-                src="https://picsum.photos/seed/aboutdp2024/700/800"
+                src="public/images/board.jpeg"
                 alt="Diamond Precast factory and team"
                 className="about-img"
                 loading="lazy"
