@@ -45,7 +45,7 @@ export default function About() {
             <div className="about-image-wrap">
               {/* REPLACE IMAGE: Company team / factory / site overview photo */}
               <img
-                src="public/images/board.jpeg"
+                src="images/board.jpeg"
                 alt="Diamond Precast factory and team"
                 className="about-img"
                 loading="lazy"
