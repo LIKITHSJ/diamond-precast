@@ -35,7 +35,51 @@ function StatItem({ stat }) {
     </div>
   )
 }
+const slideshowImages = [
+  '/images/compound1.jpeg',
+  '/images/compound2.jpeg',
+  '/images/compound3.jpeg',
+  '/images/compound4.jpeg',
+  '/images/compound5.jpeg',
+  '/images/compoundmaking1.jpeg',
+  '/images/compoundmaking2.jpeg',
+  '/images/concrete1.jpeg',
+]
 
+function HeroSlideshow() {
+  const [current, setCurrent] = React.useState(0)
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent(prev => (prev + 1) % slideshowImages.length)
+    }, 4000)
+    return () => clearInterval(timer)
+  }, [])
+
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
+      {slideshowImages.map((src, i) => (
+        <img
+          key={src}
+          src={src}
+          alt="Diamond Precast"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            opacity: i === current ? 1 : 0,
+            transition: 'opacity 1.5s ease-in-out',
+          }}
+          loading={i === 0 ? 'eager' : 'lazy'}
+        />
+      ))}
+      <div className="hero-overlay" />
+    </div>
+  )
+}
 export default function Hero() {
   const heroRef = useRef(null)
   const callRef = useRef(null)
@@ -68,18 +112,7 @@ export default function Hero() {
   return (
     <section id="home" ref={heroRef} className="hero-section" aria-label="Hero">
       <motion.div className="hero-bg" style={{ y: bgY }}>
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          disablePictureInPicture
-          controlsList="nodownload nofullscreen noremoteplayback"
-          className="hero-bg-img"
-          style={{ pointerEvents: 'none' }}
-        >
-          <source src="/images/hero-bg.mp4" type="video/mp4" />
-        </video>
+        <HeroSlideshow />
         <div className="hero-overlay" />
       </motion.div>
 

@@ -4,29 +4,29 @@ export const products = [
     title: 'Ready Made Compound Wall',
     description:
       'Our flagship precast compound walls combine structural integrity with elegant finish. Pre-engineered for rapid installation, these walls reduce on-site construction time by up to 60% compared to traditional brick construction.',
-    materials: ['M25 Grade Concrete', '6 to 8mm Steel', '20mm Jelly Stone', '55 Grade Cement of Premium Brands'],
+    materials: ['M-25 Grade & M-30 Grade RCC Slabs', '20mm Jelly & Verified M-Sand', '53 Grade Cement', 'Available in 7 to 12 feet height'],
     image: 'https://picsum.photos/seed/compoundwall1/600/400',
     badge: 'Best Seller',
-    specs: 'Height: 6–12 ft | Thickness: 4–6 inch',
+    specs: 'Height: 7–12 ft | Grade: M25 & M30',
   },
   {
     id: 2,
     title: 'M25 Grade Precast Slab',
     description:
       'High-performance M25 grade precast slabs designed for residential and commercial roofing. Factory-cast under controlled conditions ensuring consistent strength and dimensional accuracy every time.',
-    materials: ['M25 Concrete Mix', '6 to 8mm Steel', '20mm Jelly Small Stone', '55 Grade Cement of Premium Brands'],
+    materials: ['M-25 Grade Slab', '20mm Jelly', 'Verified M-Sand', '53 Grade Cement', '3 to 4mm Wire'],
     image: 'https://picsum.photos/seed/precaseslab/600/400',
     badge: 'Premium',
-    specs: 'Grade: M25 | Load: 2–4 kN/m²',
+    specs: 'Size: 1ft Height x 7ft Width | Grade: M25',
   },
   {
     id: 3,
     title: 'M30 Grade Precast Column',
     description:
       'Engineered M30 grade columns for superior load-bearing performance. Pre-drilled connection points enable fast, accurate assembly on site with minimal heavy equipment dependency.',
-    materials: ['M30 Concrete Mix', '6 to 8mm Steel', '55 Grade Cement of Premium Brands', '20mm Jelly Small Stone'],
+    materials: ['M-30 Grade Column', '20mm Jelly', 'Verified M-Sand', '3 to 4mm Steel Wire', '53 Grade Cement'],
     image: 'https://picsum.photos/seed/precastcolumn/600/400',
     badge: 'M30 Grade',
-    specs: 'Grade: M30 | Heights: 8–20 ft',
+    specs: 'Available in 7–12 ft | Grade: M30',
   },
 ]

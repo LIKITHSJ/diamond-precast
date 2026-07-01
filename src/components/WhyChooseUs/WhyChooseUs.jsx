@@ -8,7 +8,7 @@ const reasons = [
   { icon: DollarSign, title: 'Affordable Pricing', desc: 'Transparent quotes with no hidden extras. Factory-direct pricing saves you 20–30%.' },
   { icon: Zap, title: 'Fast Installation', desc: 'Precast construction is up to 60% faster than conventional masonry — your project finishes sooner.' },
   { icon: Truck, title: 'Modern Equipment', desc: 'Hydraulic cranes, laser levels and precision transport rigs for safe, accurate delivery and placement.' },
-  { icon: Heart, title: 'Customer Satisfaction', desc: '600+ happy clients across 25+ areas. Our reputation is built on referrals and repeat business.' },
+  { icon: Heart, title: 'Customer Satisfaction', desc: '2000+ happy clients across 1000+ areas. Our reputation is built on referrals and repeat business.' },
   { icon: Award, title: 'Quality Assurance', desc: 'Every element is factory-tested before dispatch. We issue a quality certificate with every project.' },
   { icon: CheckSquare, title: 'End-to-End Delivery', desc: 'One call covers everything — design, manufacturing, transport and full site installation.' },
 ]
@@ -34,7 +34,7 @@ export default function WhyChooseUs() {
               Eight Reasons<br />Builders Trust<br />Diamond Precast
             </h2>
             <p className="section-subtitle" style={{ color: 'rgba(255,255,255,0.65)', marginBottom: '40px' }}>
-              We didn't become Karnataka's most trusted precast partner by accident. Every commitment below is backed by 15 years of on-site proof.
+              We didn't become Karnataka's most trusted precast partner by accident. Every commitment below is backed by 8+ years of on-site proof.
             </p>
             {/* REPLACE IMAGE: Site/team showcase photo for why-choose-us section */}
             <div className="why-image-wrap">
