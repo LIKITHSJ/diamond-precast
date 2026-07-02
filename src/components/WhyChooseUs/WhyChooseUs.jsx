@@ -8,7 +8,7 @@ const reasons = [
   { icon: DollarSign, title: 'Affordable Pricing', desc: 'Transparent quotes with no hidden extras. Factory-direct pricing saves you 20–30%.' },
   { icon: Zap, title: 'Fast Installation', desc: 'Precast construction is up to 60% faster than conventional masonry — your project finishes sooner.' },
   { icon: Truck, title: 'Modern Equipment', desc: 'Hydraulic cranes, laser levels and precision transport rigs for safe, accurate delivery and placement.' },
-  { icon: Heart, title: 'Customer Satisfaction', desc: '2000+ happy clients across 1000+ areas. Our reputation is built on referrals and repeat business.' },
+  { icon: Heart, title: 'Customer Satisfaction', desc: '5000+ happy clients across 3000+ areas. Our reputation is built on referrals and repeat business.' },
   { icon: Award, title: 'Quality Assurance', desc: 'Every element is factory-tested before dispatch. We issue a quality certificate with every project.' },
   { icon: CheckSquare, title: 'End-to-End Delivery', desc: 'One call covers everything — design, manufacturing, transport and full site installation.' },
 ]

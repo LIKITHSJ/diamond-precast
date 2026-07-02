@@ -9,7 +9,7 @@ export const materials = [
   {
     id: 2,
     title: '6–8 mm High-Tensile Steel',
-    description: 'High quality 6 to 8mm steel reinforcement bars with guaranteed yield strength. Ensures longevity and structural strength across all projects.',
+    description: 'High quality 4 to 5 mm steel reinforcement bars with guaranteed yield strength. Ensures longevity and structural strength across all projects.',
     icon: 'zap',
     stat: 'Fe 500',
   },
