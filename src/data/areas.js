@@ -1,5 +1,5 @@
 export const areas = [
-  { id: 1, name: 'Bengaluru', state: 'Karnataka' },
+  { id: 1, name: 'Bengaluru', state: 'Karnataka' },//
   { id: 2, name: 'Chitradurga', state: 'Karnataka' },
   { id: 3, name: 'Davanagere', state: 'Karnataka' },
   { id: 4, name: 'Chittoor', state: 'Andhra Pradesh' },
