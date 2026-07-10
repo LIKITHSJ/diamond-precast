@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.diamondprecast.com/sitemap.xml
+Sitemap: https://www.diamondprecast.in/sitemap.xml
